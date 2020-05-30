@@ -2884,6 +2884,181 @@ class PartitionViz(NVD3TimeSeriesViz):
         return self.nest_values(levels)
 
 
+class XspreadsheetVix(BaseViz):
+
+    """集成xspreadsheet"""
+
+    viz_type = "x-spreadsheet"
+    verbose_name = _("X-Spreadsheet")
+    is_timeseries = False
+    enforce_numerical_metrics = False
+
+    def should_be_timeseries(self):
+        fd = self.form_data
+        # TODO handle datasource-type-specific code in datasource
+        conditions_met = (fd.get("granularity") and fd.get("granularity") != "all") or (
+            fd.get("granularity_sqla") and fd.get("time_grain_sqla")
+        )
+        if fd.get("include_time") and not conditions_met:
+            raise Exception(
+                _("Pick a granularity in the Time section or " "uncheck 'Include Time'")
+            )
+        return fd.get("include_time")
+
+    def query_obj(self) -> Dict[str, Any]:  # Any类型兼容所有类型，赋值时不用安全检查
+        '''
+        重写 qurey_obj，处理查询条件
+        :return: d
+        '''
+        d = super().query_obj()
+        fd = self.form_data
+
+        if fd.get("all_columns") and (
+            fd.get("groupby") or fd.get("metrics") or fd.get("percent_metrics")
+        ):
+            raise Exception(
+                _(
+                    "Choose either fields to [Group By] and [Metrics] and/or "
+                    "[Percentage Metrics], or [Columns], not both"
+                )
+            )
+
+        sort_by = fd.get("timeseries_limit_metric")
+        if fd.get("all_columns"):
+            d["columns"] = fd.get("all_columns")
+            d["groupby"] = []
+            order_by_cols = fd.get("order_by_cols") or []
+            d["orderby"] = [json.loads(t) for t in order_by_cols]
+        elif sort_by:
+            sort_by_label = utils.get_metric_name(sort_by)
+            if sort_by_label not in utils.get_metric_names(d["metrics"]):
+                d["metrics"] += [sort_by]
+            d["orderby"] = [(sort_by, not fd.get("order_desc", True))]
+
+        # Add all percent metrics that are not already in the list
+        if "percent_metrics" in fd:
+            d["metrics"].extend(
+                m for m in fd["percent_metrics"] or [] if m not in d["metrics"]
+            )
+
+        d["is_timeseries"] = self.should_be_timeseries()
+        return d
+
+
+    @staticmethod
+    def df2xspreadsheetjson(df) -> Dict:
+        '''
+        df对象转为 x-spreadsheet格式的json字符串
+        :param df: 从数据库得到的 dataframe
+        :return: str
+        '''
+        cols = []
+        # 重命名标题行，主要考虑标题行空等情况
+        for col in df.columns:
+            if col == "":
+                cols.append("N/A")  # 标题行空，一般不可能
+            elif col is None:
+                cols.append("NULL")  # 表是空的
+            else:
+                cols.append(col)  # 复制过去
+        # print(cols)
+        df.columns = cols
+
+        if df.shape[0] < 1 or df.shape[1] < 1:
+            return '{}'
+
+        metrics = cols
+        df = df[metrics]  # 取我们需要的字段
+        # 直接拼接字符串
+        info = ''
+        # 先拼接标题行
+        info += '\"0\":{\"cells\":{'
+        for i in range(len(metrics)):
+            if i != len(metrics) - 1:
+                info += '\"' + str(i) + '\":' + '{\"text\":\"' + str(metrics[i]) + "\"},"
+            else:
+                info += '\"' + str(i) + '\":' + '{\"text\":\"' + str(metrics[i]) + "\"}"
+        info += '}},'
+
+        for index, row in df.iterrows():
+            info += '\"' + str(index + 1) + '\":'
+            for j in range(len(metrics)):
+                if j == 0:
+                    info += "{\"cells\":{"
+                # print(row[col])
+                if j != len(metrics) - 1:
+                    info += '\"' + str(j) + '\":' + '{\"text\":\"' + str(row[metrics[j]]) + "\"},"
+                else:
+                    info += '\"' + str(j) + '\":' + '{\"text\":\"' + str(row[metrics[j]]) + "\"}"
+            info += '}},'
+
+        rows = '{' + info + '\"len\":\"' + str(df.shape[0] + 2) + '\"}'  # 加标题行长度，最好再加上一行+1+1
+        cols = '\"cols\":{\"len\":\"' + str(df.shape[1] + 1) + '\"}'
+        ret_str = '{\"name\":\"表格\",\"rows\":' + rows + ',' + cols + '}'
+
+        return json.loads(ret_str)  # 最后把它转为一个字典，方便后续处理
+
+
+
+    def get_data(self, df: pd.DataFrame) -> Dict:
+        """
+        Transform the query result to the table representation.
+
+        :param df: The interim dataframe
+        :returns: The table visualization data
+        """
+
+        non_percent_metric_columns = []
+        # Transform the data frame to adhere to the UI ordering of the columns and
+        # metrics whilst simultaneously computing the percentages (via normalization)
+        # for the percent metrics.
+
+        if DTTM_ALIAS in df:
+            # 处理时间序列
+            if self.should_be_timeseries():
+                non_percent_metric_columns.append(DTTM_ALIAS)
+            else:
+                del df[DTTM_ALIAS]
+
+        non_percent_metric_columns.extend(
+            self.form_data.get("all_columns") or self.form_data.get("groupby") or []
+        )
+
+        non_percent_metric_columns.extend(
+            utils.get_metric_names(self.form_data.get("metrics") or [])
+        )
+
+        timeseries_limit_metric = utils.get_metric_name(
+            self.form_data.get("timeseries_limit_metric")
+        )
+        if timeseries_limit_metric:
+            non_percent_metric_columns.append(timeseries_limit_metric)
+
+        percent_metric_columns = utils.get_metric_names(
+            self.form_data.get("percent_metrics") or []
+        )
+
+        df = pd.concat(
+            [
+                df[non_percent_metric_columns],
+                (
+                    df[percent_metric_columns]
+                    .div(df[percent_metric_columns].sum())
+                    .add_prefix("%")
+                ),
+            ],
+            axis=1,
+        )
+        data = self.df2xspreadsheetjson(df)  # 转化为xspreadsheet格式的jsonDict
+
+        return data
+
+    def json_dumps(self, obj, sort_keys=False):
+        return json.dumps(
+            obj, default=utils.json_iso_dttm_ser, sort_keys=sort_keys, ignore_nan=True
+        )
+
+
 viz_types = {
     o.viz_type: o
     for o in globals().values()

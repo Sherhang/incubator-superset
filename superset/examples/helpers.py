@@ -68,7 +68,11 @@ def get_slice_json(defaults, **kwargs):
 
 
 def get_example_data(filepath, is_gzip=True, make_bytes=False):
-    content = request.urlopen(f"{BASE_URL}{filepath}?raw=true").read()
+    # content = request.urlopen(f"{BASE_URL}{filepath}?raw=true").read()
+    # 改为本地加载
+    LOCAL_URL = "/home/yehang/D_File/MyProg/superset0.36/superset/examples/examples-data-master/"
+    content = open(LOCAL_URL+filepath,'rb')
+    content = content.read()
     if is_gzip:
         content = zlib.decompress(content, zlib.MAX_WBITS | 16)
     if make_bytes:
