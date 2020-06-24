@@ -323,9 +323,14 @@ IMG_UPLOAD_URL = "/static/uploads/"
 # Setup image size default is (300, 200, True)
 # IMG_SIZE = (300, 200, True)
 
-CACHE_DEFAULT_TIMEOUT = 60 * 60 * 24
-CACHE_CONFIG: CacheConfig = {"CACHE_TYPE": "null"}
-TABLE_NAMES_CACHE_CONFIG: CacheConfig = {"CACHE_TYPE": "null"}
+CACHE_DEFAULT_TIMEOUT = 60 * 20
+CACHE_CONFIG = {
+    'CACHE_TYPE': 'redis',  # 使用 Redis
+    'CACHE_REDIS_HOST': 'localhost',  # 配置域名
+    'CACHE_REDIS_PORT': 6379,  # 配置端口号
+    'CACHE_REDIS_URL': 'redis://localhost:6379/0'  # 配置 URL
+}
+TABLE_NAMES_CACHE_CONFIG: CacheConfig = CACHE_CONFIG
 
 # CORS Options
 ENABLE_CORS = False
@@ -414,7 +419,7 @@ LOG_LEVEL = "DEBUG"
 # ---------------------------------------------------
 # LOG_LEVEL = DEBUG, INFO, WARNING, ERROR, CRITICAL
 
-ENABLE_TIME_ROTATE = False
+ENABLE_TIME_ROTATE = True
 TIME_ROTATE_LOG_LEVEL = "DEBUG"
 FILENAME = os.path.join(DATA_DIR, "superset.log")
 ROLLOVER = "midnight"

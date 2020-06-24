@@ -5362,3 +5362,215 @@ msgstr "线宽"
 
 #~ msgid "Cannot find User %(name)s, please ask your admin to create one."
 #~ msgstr "找不到用户 %(name)s，请您让管理员创建一个。"
+
+#: 补充源码未翻译部分
+msgid "Propagate"
+msgstr "过滤器广播"
+
+msgid "Line Chart"
+msgstr "时间序列-折线图"
+
+msgid "Bar Chart"
+msgstr "条形图"
+
+msgid "Area Chart"
+msgstr "时间序列-堆叠面积图"
+
+msgid "Time-series Table"
+msgstr "时间序列表"
+
+msgid "Force-directed Graph"
+msgstr "力导向图"
+
+msgid "Paired t-test Table"
+msgstr "配对T检验表"
+
+msgid "Dashboard Emails"
+msgstr "看板邮件"
+
+msgid "Chart Email Schedules"
+msgstr "图表邮件"
+
+#: 新增组件翻译
+#: src\visualizations\MixLineBar\MixLineBarChartPlugin.js:8
+msgid "Mix Line Bar"
+msgstr "柱状折线图"
+
+msgid "Multi Chart"
+msgstr "组合图"
+
+#: src\explore\controls.jsx:1969  src\explore\controlPanels\MixLineBar.js:27
+msgid "Line Type"
+msgstr "折线图"
+
+#: src\explore\controls.jsx:1969
+msgid "Line Type Metrics"
+msgstr "折线图字段"
+
+#:incubator-superset-0.36\superset-frontend\src\explore\controlPanels\MixLineBar.js:34
+msgid "Bar Type"
+msgstr "柱状图"
+
+#: src\explore\controls.jsx:1978
+msgid "Bar Type Metrics"
+msgstr "柱状图字段"
+
+msgid "Area Type Metrics"
+msgstr "堆叠面积图字段"
+
+#:incubator-superset-0.36\superset-frontend\src\explore\controlPanels\MixLineBar.js:41
+msgid "Real Y Axis 2 Display Columns"
+msgstr "右Y轴显示的列"
+
+#:incubator-superset-0.36\superset-frontend\src\explore\controls.jsx:1987,2044
+msgid "Y Axis 2 Column"
+msgstr "选择右Y轴的列"
+
+#:incubator-superset-0.36\superset-frontend\src\explore\controlPanels\MixLineBar.js:49
+msgid "Y Axis 1 Scale Value Setting"
+msgstr "左Y轴标度值设置"
+
+#:incubator-superset-0.36\superset-frontend\src\explore\controls.jsx:1992,1995
+msgid "Left Y Min"
+msgstr "Y轴下边界"
+
+#:incubator-superset-0.36\superset-frontend\src\explore\controls.jsx:1999,2002
+msgid "Left Y Max"
+msgstr "Y轴上边界"
+
+#:incubator-superset-0.36\superset-frontend\src\explore\controls.jsx:2006,2009
+msgid "Left Y Interval"
+msgstr "Y轴比例尺间隔"
+
+#:incubator-superset-0.36\superset-frontend\src\explore\controlPanels\MixLineBar.js:57
+msgid "Y Axis 2 Scale Value Setting"
+msgstr "右Y轴标度值设置"
+
+#:incubator-superset-0.36\superset-frontend\src\explore\controls.jsx:2013,2016
+msgid "Right Y Min"
+msgstr "右Y轴下边界"
+
+#:incubator-superset-0.36\superset-frontend\src\explore\controls.jsx:2020,2023
+msgid "Right Y Max"
+msgstr "右Y轴上边界"
+
+#:incubator-superset-0.36\superset-frontend\src\explore\controls.jsx:2027,2030
+msgid "Right Y Interval"
+msgstr "右Y轴比例尺间隔"
+
+#:incubator-superset-0.36\superset-frontend\src\explore\controls.jsx:2034
+msgid "Y Axis 2 Label"
+msgstr "右Y轴标签"
+
+msgid "Choose or add metrics (label) to display in right y axis"
+msgstr "填写在右Y轴展示的字段，必须和整个Y轴已经定义的字段同名，包括计算逻辑，如AVG(metric)"
+
+#:
+msgid "Use Default Colors"
+msgstr "使用默认配色"
+
+#:
+msgid "Dark Theme"
+msgstr "黑色主题"
+
+#:
+msgid "X Axis Type"
+msgstr "X轴类型"
+
+#:
+msgid "Open Data Zoom"
+msgstr "开启缩放"
+
+#:
+msgid "Use mouse wheel to control zoom"
+msgstr "使用鼠标滚轮控制缩放，使用鼠标左键拖动范围"
+
+msgid "Use Scolling Legend"
+msgstr "滚动图例"
+
+msgid "Allowing for more room for legends"
+msgstr "为图例提供更多空间"
+
+msgid "Top Margin"
+msgstr "顶部边距"
+
+msgid "In percents, allowing for more room for axis labels"
+msgstr "百分比，为标签提供更多空间"
+
+msgid "Right Margin"
+msgstr "右边距"
+
+msgid "X Options"
+msgstr "X轴设置"
+
+msgid "X Min"
+msgstr "X轴最小值"
+
+msgid "X Max"
+msgstr "X轴最大值"
+
+msgid "Valid only for numeric data"
+msgstr "仅对数值型数据有效"
+
+#:
+msgid "X Axis Rotate"
+msgstr "X轴文本倾斜角度"
+
+#:
+msgid "Y1 Axis Type"
+msgstr "Y轴类型"
+
+#:
+msgid "Y2 Axis Type"
+msgstr "右Y轴类型"
+
+#:
+msgid "Bar Negative"
+msgstr "正负条形图"
+
+#:
+msgid "Xspreadsheet"
+msgstr "在线Excel"
+
+msgid "Xspreadsheet Choice"
+msgstr "在线表格配置项"
+
+msgid "Loading Mode"
+msgstr "加载模式"
+
+msgid "Add Permission"
+msgstr "添加可编辑者"
+
+msgid "Reset Permission"
+msgstr "重置可编辑者"
+
+msgid "People who can edit this table"
+msgstr "可以编辑该表格的用户，可以手动输入未列出的用户"
+
+msgid "Start Row"
+msgstr "起始行"
+
+msgid "The start row to render table"
+msgstr "从第几行开始渲染表格，下标从0开始计算"
+
+msgid "Start Col"
+msgstr "起始行"
+
+msgid "The start column to render table"
+msgstr "从第几列开始渲染表格，下标从0开始计算"
+
+msgid "Time Series Scatter"
+msgstr "时间序列-散点图"
+
+msgid "Cumulative Distribution"
+msgstr "累积分布直方图"
+
+msgid "Show Histogram"
+msgstr "显示条形图"
+
+msgid "Num Of Bins"
+msgstr "直方图组数"
+
+msgid "X Decimal Point"
+msgstr "X轴小数点位数"
+
