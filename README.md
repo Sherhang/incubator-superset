@@ -22,6 +22,7 @@ Echarts, xspreadsheet, antd...
 
 BI based on superset0.36. 
 
+You can try it at http://sazf7z.natappfree.cc/ by user:user.
 
 [![Build Status](https://travis-ci.org/apache/incubator-superset.svg?branch=master)](https://travis-ci.org/apache/incubator-superset)
 [![PyPI version](https://badge.fury.io/py/apache-superset.svg)](https://badge.fury.io/py/apache-superset)
