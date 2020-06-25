@@ -18,6 +18,9 @@ under the License.
 -->
 Superset
 =========
+Echarts, xspreadsheet, antd...
+BI based on superset0.36. 
+
 
 [![Build Status](https://travis-ci.org/apache/incubator-superset.svg?branch=master)](https://travis-ci.org/apache/incubator-superset)
 [![PyPI version](https://badge.fury.io/py/apache-superset.svg)](https://badge.fury.io/py/apache-superset)
